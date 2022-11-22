@@ -1,8 +1,7 @@
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_executable(TestShell main.cpp Test.h Test.cpp)
-
 file(GLOB TEST_FILES ${TESTS_DIR}/*)
+add_executable(TestShell main.cpp)
 foreach(TEST_FILE ${TEST_FILES})
-    #команда, которая инклудит к таргету файлы (не могу её вспомнить)
+    target_compile_options(TestShell PUBLIC "SHELL:-include ${TEST_FILE}")
 endforeach()

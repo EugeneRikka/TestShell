@@ -1,9 +1,8 @@
 #include "Test.h"
 
 int main() {
-    std::cout << Test::tests.size() << std::endl;
-
-    for (Test *test: Test::tests) {
+    for (Test* test: Test::tests) {
+        test->init();
         test->run();
     }
 

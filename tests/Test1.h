@@ -2,14 +2,11 @@
 
 #include "testShell/Test.h"
 
-class Test1 : public Test {
-public:
-    Test1() : Test("Test1") {
-    }
+DEFINE_TEST(Test1)
 
-    void run() override {
-        std::cout << name << std::endl;
-    }
-};
+void Test1::init() {
+}
 
-extern Test1 test1;
+void Test1::run() {
+    std::cout << name << std::endl;
+}
