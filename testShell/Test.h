@@ -14,6 +14,11 @@ protected:
 public:
     static std::vector<Test*> tests;
 
+    Test(const Test &other) = delete;
+    void operator=(const Test &other) = delete;
+    Test(const Test &&other) = delete;
+    void operator=(const Test &&other) = delete;
+    
     virtual void init() = 0;
     virtual void run() = 0;
 };
@@ -22,12 +27,15 @@ std::vector<Test*> Test::tests;
 
 #define DEFINE_TEST(TestName)            \
 class TestName : public Test {           \
-public:                                  \
+private:                                 \
+    static TestName obj##TestName;       \
+                                         \
     TestName() : Test(#TestName) {       \
     }                                    \
                                          \
+public:                                  \
     void init() override;                \
     void run() override;                 \
 };                                       \
                                          \
-static TestName obj##TestName;
+TestName TestName::obj##TestName;
