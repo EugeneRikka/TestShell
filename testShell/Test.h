@@ -106,6 +106,7 @@ protected:
 
     Test(const char* name) : name(name) {
         tests.push_back(this);
+        testsMap.emplace(name, this);
     }
 
     virtual void init() = 0;
@@ -114,25 +115,27 @@ protected:
 
 public:
     static std::vector<Test*> tests;
+    static std::map<std::string, Test*> testsMap;
 
     Test(const Test &other) = delete;
     Test &operator=(const Test &other) = delete;
     Test(const Test &&other) = delete;
     Test &operator=(const Test &&other) = delete;
 
-    void start() {
+    bool start() {
         try {
             init();
         } catch (const std::runtime_error &error) {
             std::cout << name + ". Initialize error: " << error.what() << '\n';
-            return;
+            return false;
         }
 
         if (!testData.isCasesTypeSet()) {
             std::cout << name + ". testData cases type must be set\n";
-            return;
+            return false;
         }
 
+        bool globalSuccess = true;
         do {
             bool successful = true;
 
@@ -143,14 +146,18 @@ public:
                 std::cout << name + " (" << info() << "). Failed, reason - " << error.what() << '\n';
             }
 
+            globalSuccess &= successful;
             if (successful) {
                 std::cout << name + " (" << info() << "). OK\n";
             }
         } while (testData.nextCase());
+
+        return globalSuccess;
     }
 };
 
 std::vector<Test*> Test::tests;
+std::map<std::string, Test*> Test::testsMap;
 
 #define DEFINE_TEST(TestName)            \
 class TestName : public Test {           \
