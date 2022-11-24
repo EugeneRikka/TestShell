@@ -2,8 +2,7 @@
 
 int main() {
     for (Test* test: Test::tests) {
-        test->init();
-        test->run();
+        test->start();
     }
 
     return 0;
